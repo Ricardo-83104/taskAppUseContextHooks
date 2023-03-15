@@ -1,27 +1,36 @@
 import './App.css';
+import TaskList from './components/TaskList'
+import TaskForm from "./components/TaskForm";
+import {tasks as data} from "./data/tasks"
+import { useState, useEffect } from "react";
+
 
 function App() {
+
+  const[tasks,setTasks]= useState([]);
+//se ejecuta en el 1 render
+useEffect(()=> {
+setTasks(data)
+}, [])
+
+function createTask(task){
+setTasks([...tasks, {
+  title: task.title,
+  id:task.length,
+  description: task.description
+}])
+
+}
+
+function deleteTask(taskId){
+  // es diferente el id de la tarea al taskId que le están pasando?
+  setTasks(tasks.filter(task=> task.id != taskId))
+}
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src="Octocat.png" className="App-logo" alt="logo" />
-        <p>
-          GitHub Codespaces <span className="heart">♥️</span> React
-        </p>
-        <p className="small">
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </p>
-      </header>
+    <div>
+      <TaskForm createTask={createTask}/>
+      <TaskList tasks={tasks} deleteTask={deleteTask}/>
     </div>
   );
 }
